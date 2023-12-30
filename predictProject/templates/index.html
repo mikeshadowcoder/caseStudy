@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+        $(".sidebar ul li").on('click', function () {
+        $(".sidebar ul li.active").removeClass('active');
+        $(this).addClass('active');
+        });
+    
+        $('.open-btn').on('click', function () {
+        $('.sidebar').addClass('active');
+    
+        });
+    
+    
+        $('.close-btn').on('click', function () {
+        $('.sidebar').removeClass('active');
+    
+        })
+    </script>
+    <style>
+
+body{
+    background: #58595a !important;
+   }
+   
+   #side_nav{
+    background: #2C2F33;
+    min-width: 250px;
+    max-width: 250px;
+    transition: all 0.3s;
+   }
+   .content{
+      min-height: 100vh;
+      width: 100%;
+   }
+   hr.h-color{
+     background: #23272A;
+   }
+   
+   .sidebar li.active{
+      background: #eee;
+      border-radius: 8px;
+   }
+   
+   .sidebar li.active a, .sidebar li.active a:hover {
+    color: #2C2F33;
+   }
+   .sidebar li a{
+    color: #fff;
+   }
+   
+   @media(max-width: 767px){
+    #side_nav{
+      margin-left: -250px;
+      position: absolute;
+      min-height: 100vh;
+      z-index: 1;
+   
+    }
+    #side_nav.active{
+      margin-left: 0;
+     }
+   }
+
+    </style>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Web App</title>
+
+    <!-- Bootstrap CSS-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='predictproject/styles.css') }}"> -->
+    <link rel="stylesheet" href="/static/predictproject/styles.css">
+</head>
+<body>
+    <div class="main-container d-flex">
+        <div class="sidebar" id="side_nav">
+            <div class="header-box px-2 pt-3 pb-4 d-flex justify-content-between">
+                <h1 class="fs-4"><span class="bg-white text-dark rounded shadow px-2 me-2">PA</span> <span
+                        class="text-white">Predict App</span></h1>
+                <button class="btn d-md-none d-block close-btn px-1 py-0 text-white"><i
+                        class="fal fa-stream"></i></button>
+            </div>
+    
+                <ul class="list-unstyled px-2">
+                    <li class="active"><a href="/" class="text-decoration-none px-3 py-2 d-block"><i
+                                class="fal fa-home"></i>Classification</a></li>
+                    <li class=""><a href="/regression" class="text-decoration-none px-3 py-2 d-block"><i class="fal fa-list"></i>
+                            Regression</a></li>
+                </ul>
+    
+        </div>
+        <div class="content">
+            <nav class="navbar navbar-expand-md navbar-light bg-light">
+                <div class="container-fluid">
+                    <div class="d-flex justify-content-between d-md-none d-block">
+                     <button class="btn px-1 py-0 open-btn me-2"><i class="fal fa-stream"></i></button>
+                        <a class="navbar-brand fs-4" href="#"><span class="bg-dark rounded px-2 py-0 text-white">CL</span></a>
+                       
+                    </div>
+                    <button class="navbar-toggler p-0 border-0" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fal fa-bars"></i>
+                    </button>
+                </div>
+            </nav>
+    
+            <div class="dashboard-content text-center px-3 pt-4">        
+                <h1 class="text-light">Weather Prediction</h1>
+                    <form action="/" method="post" onsubmit="return validateForm()">
+                    <div class="form-group row">
+                      <label for="prepicitation" class="col-sm-4 col-form-label text-light">Precipitation:</label>
+                      <div class="col-sm-5">
+                      <input type="text" class="form-control" name="prepicitation" required><br>
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <label for="temp_max" class="col-sm-4 col-form-label text-light">Max Temperature:</label>
+                      <div class="col-sm-5">
+                      <input type="text" class="form-control" name="temp_max" required><br>
+                      </div>
+                    </div>
+                     
+                    <div class="form-group row">
+                      <label for="temp_min" class="col-sm-4 col-form-label text-light">Min Temperature:</label>
+                      <div class="col-sm-5">
+                      <input type="text" class="form-control" name="temp_min" required><br>
+                      </div>
+                    </div>
+                      
+                    <div class="form-group row">
+                      <label for="wind" class="col-sm-4 col-form-label text-light">Wind Speed:</label>
+                      <div class="col-sm-5">
+                      <input type="text" class="form-control" name="wind" required><br>
+                      </div>
+                    </div>
+
+                    <label class="btn btn-default">
+                    <input type="submit" value="Predict">
+                    </label>
+                    </form>
+  
+                    {% if prediction is defined %}
+                    <h1 class="display-4 text-light">The predicted weather is: {{ prediction }}</h1>
+                    {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function validateForm() {
+            var tempMaxInput = parseFloat(document.getElementsByName("temp_max")[0].value);
+            var tempMinInput = parseFloat(document.getElementsByName("temp_min")[0].value);
+    
+            // Check if temp_min is greater than temp_max
+            if (tempMinInput > tempMaxInput) {
+                alert("Minimum temperature cannot be greater than Maximum temperature.");
+                return false; // Prevent form submission
+            }
+    
+            // Continue with form submission if validation passes
+            return true;
+        }
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+</body>
+</html>
