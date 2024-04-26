@@ -1,5 +1,10 @@
 from flask import Flask, render_template, request, jsonify
 import joblib
+import pandas as pd
+import matplotlib.pyplot as plt
+import io
+import base64
+import urllib
 
 app = Flask(__name__)
 
@@ -7,7 +12,11 @@ app = Flask(__name__)
 model = joblib.load('weather_model.joblib')
 # Load the trained Regression model
 regression_model = joblib.load('precip_model.joblib')
-#=========================LOADING MODELS=======================================
+#=========================LOADING MODELS==========================================
+
+excel_data = pd.read_csv('seattle-weather.csv')
+excel_data2 = pd.read_csv('Rainfall_data.csv')
+#=========================LOADING DATASHEET=======================================
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -50,6 +59,25 @@ def predict_regression():
         return render_template('regression.html', regression_prediction=regression_prediction[0])
 
     return render_template('regression.html', regression_prediction=None)
+
+#chart Route
+@app.route('/chart')
+def chart():
+    #Data for Pie Chart
+    column_name = 'weather'
+    data = excel_data[column_name].value_counts().to_dict()
+
+    labels = list(data.keys())
+    sizes = list(data.values())
+
+    #Data for Line Chart
+    column_name_line = 'Precipitation'
+    sizes_line = excel_data2[column_name_line].tolist()
+
+    #Labels
+    labels_line = list(range(1, 26))
+
+    return render_template('chart.html', labels=labels, values=sizes, labels_line=labels_line, sizes_line=sizes_line)
 
 if __name__ == '__main__':
     app.run(debug=True)
